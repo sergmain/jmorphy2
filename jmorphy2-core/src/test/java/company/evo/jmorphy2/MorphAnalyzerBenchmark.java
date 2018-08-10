@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -65,7 +66,7 @@ public class MorphAnalyzerBenchmark {
     public void loadWords(String resource) throws IOException {
         words = new ArrayList<WordCount>();
         InputStream stream = getClass().getResourceAsStream(resource);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
         String line;
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split("\\s");

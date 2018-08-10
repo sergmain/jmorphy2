@@ -2,6 +2,7 @@ package company.evo.jmorphy2.units;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import company.evo.jmorphy2.ParsedWord;
@@ -57,7 +58,7 @@ public abstract class AnalyzerUnit {
 
         @Override
         public List<ParsedWord> getLexeme() {
-            return Arrays.asList((ParsedWord) this);
+            return Collections.singletonList(this);
         }
 
         @Override

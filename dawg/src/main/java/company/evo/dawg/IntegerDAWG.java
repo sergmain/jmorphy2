@@ -2,6 +2,7 @@ package company.evo.dawg;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 public class IntegerDAWG extends DAWG {
@@ -14,7 +15,7 @@ public class IntegerDAWG extends DAWG {
     }
 
     public Integer get(String key, Integer defaultValue) throws IOException {
-        int res = dict.find(key.getBytes("UTF-8"));
+        int res = dict.find(key.getBytes(StandardCharsets.UTF_8));
         if (res == Dict.MISSING) {
             return defaultValue;
         }

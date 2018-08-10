@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class DAWG {
         int keyLength = key.length();
         List<String> res = new ArrayList<String>();
         int pos = 1;
-        for (byte b : key.getBytes("UTF-8")) {
+        for (byte b : key.getBytes(StandardCharsets.UTF_8)) {
             index = dict.followByte(b, index);
             if (index == Dict.MISSING) {
                 break;
