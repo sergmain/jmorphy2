@@ -33,8 +33,8 @@ public class MorphAnalyzerTest {
         parseds = morph.parse("красивого");
         Tag tag = parseds.get(0).tag;
         assertParseds("красивого:ADJF,Qual neut,sing,gent:красивый:красивого:0.666666\n" +
-                      "красивого:ADJF,Qual masc,sing,gent:красивый:красивого:0.1666666\n" +
-                      "красивого:ADJF,Qual anim,masc,sing,accs:красивый:красивого:0.1666666",
+                      "красивого:ADJF,Qual masc,sing,gent:красивый:красивого:0.166666\n" +
+                      "красивого:ADJF,Qual anim,masc,sing,accs:красивый:красивого:0.166666",
                       parseds);
         assertEquals(morph.getGrammeme("POST"), morph.getGrammeme("ADJF").getRoot());
         assertEquals(morph.getGrammeme("ADJF"), tag.POS);
@@ -53,8 +53,8 @@ public class MorphAnalyzerTest {
                       morph.parse("Украину"));
 
         // known prefix
-        assertParseds("псевдокошка:NOUN,anim,femn sing,nomn:псевдокошка:кошка:0.937500\n" +
-                      "псевдокошка:NOUN,inan,femn sing,nomn:псевдокошка:кошка:0.062500",
+        assertParseds("псевдокошка:NOUN,anim,femn sing,nomn:псевдокошка:кошка:0.9375\n" +
+                      "псевдокошка:NOUN,inan,femn sing,nomn:псевдокошка:кошка:0.0625",
                       morph.parse("псевдокошка"));
         assertParseds("лже-кот:NOUN,anim,masc sing,nomn:лже-кот:кот:1.0",
                       morph.parse("лже-кот"));
@@ -107,8 +107,8 @@ public class MorphAnalyzerTest {
         // е, ё
         assertParseds("ёжик:NOUN,anim,masc sing,nomn:ёжик:ёжик:1.0", morph.parse("ёжик"));
         assertParseds("ежик:NOUN,anim,masc sing,nomn:ёжик:ёжик:1.0", morph.parse("ежик"));
-        assertParseds("теплые:ADJF,Qual plur,nomn:тёплый:тёплые:0.600000\n" +
-                      "теплые:ADJF,Qual inan,plur,accs:тёплый:тёплые:0.400000",
+        assertParseds("теплые:ADJF,Qual plur,nomn:тёплый:тёплые:0.6\n" +
+                      "теплые:ADJF,Qual inan,plur,accs:тёплый:тёплые:0.4",
                       morph.parse("теплые"));
 
         // NUMB

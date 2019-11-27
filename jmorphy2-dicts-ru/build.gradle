@@ -3,7 +3,7 @@ import java.nio.file.Paths
 
 description = 'Russian pymorphy2 dictionaries'
 
-task fetchPymorphy2Dicts() {
+task fetchPymorphy2Dicts {
     doLast {
         def dictsPath = Paths.get(
                 sourceSets.main.resources.getSrcDirs().iterator()[0].toString(),
