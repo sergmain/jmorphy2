@@ -1,12 +1,13 @@
 import java.nio.file.Paths
+import org.gradle.api.file.FileCopyDetails
 
 
 description = 'Java port of pymorphy2'
 
 dependencies {
-    compile 'commons-io:commons-io:2.4'
-    compile 'org.noggit:noggit:0.7'
-    compile 'com.google.guava:guava:18.0'
+    compile 'commons-io:commons-io:2.6'
+    compile 'org.noggit:noggit:0.8'
+    compile 'com.google.guava:guava:28.1-jre'
 
     compile project(':dawg')
 
