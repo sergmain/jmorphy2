@@ -10,8 +10,7 @@ java {
 dependencies {
     implementation("commons-io:commons-io:${Versions.commonsIo}")
     implementation("org.noggit:noggit:${Versions.noggit}")
-
-    implementation(project(":dawg"))
+    implementation("commons-codec:commons-codec:${Versions.commonsCodec}")
 
     testImplementation("junit:junit:${Versions.junit}")
     testImplementation(project(":jmorphy2-dicts-ru"))
