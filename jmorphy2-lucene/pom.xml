@@ -15,6 +15,7 @@
     <description>Stemmer and tagger based on jmorphy2 for Lucene</description>
 
     <dependencies>
+        <!-- Lucene 10.4.0 (aligned with MH); note 8.x lucene-analyzers-common was renamed to lucene-analysis-common in 9.x -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
@@ -22,7 +23,17 @@
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-common</artifactId>
+            <artifactId>lucene-analysis-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-memory</artifactId>
             <version>${lucene.version}</version>
         </dependency>
 

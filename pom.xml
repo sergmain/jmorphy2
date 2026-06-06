@@ -17,7 +17,6 @@
         <module>jmorphy2-dicts-uk</module>
         <module>jmorphy2-nlp</module>
         <module>jmorphy2-lucene</module>
-        <module>jmorphy2-solr</module>
     </modules>
 
     <properties>
@@ -25,8 +24,7 @@
         <maven.compiler.release>25</maven.compiler.release>
 
         <!-- es.version 7.1.0 resolved to Lucene 8.0.0 in the old Gradle map; pinned directly here -->
-        <lucene.version>8.0.0</lucene.version>
-        <solr.version>8.0.0</solr.version>
+        <lucene.version>10.4.0</lucene.version>
 
         <commons-io.version>2.4</commons-io.version>
         <commons-codec.version>1.11</commons-codec.version>
