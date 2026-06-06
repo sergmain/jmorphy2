@@ -25,3 +25,5 @@ pymorphy2_dicts/
 pymorphy2_dicts_*/
 
 .idea
+hs_err_*.log
+replay_*.log
