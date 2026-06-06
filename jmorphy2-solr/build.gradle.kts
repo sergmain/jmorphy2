@@ -3,8 +3,8 @@ description = "Solr stemmer and tagger based on jmorphy2"
 version = getLibraryVersion()
 
 java {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {

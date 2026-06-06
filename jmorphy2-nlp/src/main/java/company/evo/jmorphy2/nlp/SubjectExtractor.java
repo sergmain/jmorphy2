@@ -5,8 +5,6 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableSet;
 
 
 public class SubjectExtractor {
@@ -41,7 +39,7 @@ public class SubjectExtractor {
     }
 
     private Set<String> parsePart(String part) {
-        return ImmutableSet.copyOf(valuesSplitter.split(part));
+        return Set.copyOf(valuesSplitter.split(part));
     }
 
     public List<String> extract(String[] tokens) throws IOException {

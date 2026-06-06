@@ -11,12 +11,9 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.text.Normalizer;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import company.evo.jmorphy2.units.*;
 
@@ -111,7 +108,7 @@ public class MorphAnalyzer {
                 prob = new ProbabilityEstimator(loader);
             }
             if (cacheSize > 0) {
-                cache = CacheBuilder.newBuilder().maximumSize(cacheSize).build();
+                cache = new Cache<>(cacheSize);
             }
             return new MorphAnalyzer(tagStorage, units, prob, cache);
         }
@@ -167,7 +164,7 @@ public class MorphAnalyzer {
 
     public List<Tag> tag(String word) throws IOException {
         List<ParsedWord> parseds = parse(word);
-        List<Tag> tags = Lists.newArrayListWithCapacity(parseds.size());
+        List<Tag> tags = new ArrayList<>(parseds.size());
         for (ParsedWord p : parseds) {
             tags.add(p.tag);
         }
@@ -193,7 +190,7 @@ public class MorphAnalyzer {
 
     private List<ParsedWord> parseNC(String word) throws IOException {
         String wordLower = word.toLowerCase();
-        List<ParsedWord> parseds = Lists.newArrayList();
+        List<ParsedWord> parseds = new ArrayList<>();
         for (AnalyzerUnit unit : units) {
             List<ParsedWord> unitParseds = unit.parse(word, wordLower);
             if (unitParseds == null) {
@@ -255,5 +252,27 @@ public class MorphAnalyzer {
             }
         }
         return filteredParseds;
+    }
+
+    // Simple thread-safe bounded LRU cache (replacement for Guava Cache)
+    private static class Cache<K,V> {
+        private final Map<K,V> map;
+
+        Cache(final int maximumSize) {
+            map = Collections.synchronizedMap(new LinkedHashMap<K,V>(16, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
+                    return size() > maximumSize;
+                }
+            });
+        }
+
+        V getIfPresent(K key) {
+            return map.get(key);
+        }
+
+        void put(K key, V value) {
+            map.put(key, value);
+        }
     }
 }

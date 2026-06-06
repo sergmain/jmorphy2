@@ -3,8 +3,8 @@ description = "Java port of pymorphy2"
 version = getLibraryVersion()
 
 java {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
@@ -31,7 +31,7 @@ tasks.register<Jar>(
 ) {
     dependsOn("testClasses")
     archiveClassifier.set("tests")
-    from(sourceSets.test)
+    from(sourceSets["test"].output)
 }
 
 configurations.register("tests") {

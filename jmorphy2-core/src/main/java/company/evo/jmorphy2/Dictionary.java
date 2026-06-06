@@ -77,9 +77,9 @@ public final class Dictionary {
         {
             SuffixesDAWG[] predictionSuffixes = new SuffixesDAWG[num];
             for (int i = 0; i < num; i++) {
-                InputStream suffixesStream = loader.newStream(String.format(filenameTemplate, i));
-                predictionSuffixes[i] = new SuffixesDAWG(suffixesStream);
-                suffixesStream.close();
+                try (InputStream suffixesStream = loader.newStream(String.format(filenameTemplate, i))) {
+                    predictionSuffixes[i] = new SuffixesDAWG(suffixesStream);
+                }
             }
             return predictionSuffixes;
         }
@@ -119,29 +119,27 @@ public final class Dictionary {
 
         public Dictionary build(Tag.Storage tagStorage) throws IOException {
             if (cachedDict == null) {
-                InputStream metaStream = loader.newStream(META_FILENAME);
-                Meta meta = parseMeta(metaStream);
-                metaStream.close();
-                InputStream grammemesStream = loader.newStream(GRAMMEMES_FILENAME);
-                loadGrammemes(tagStorage, grammemesStream);
-                grammemesStream.close();
-                InputStream wordsStream = loader.newStream(WORDS_FILENAME);
-                InputStream paradigmsStream = loader.newStream(PARADIGMS_FILENAME);
-                InputStream suffixesStream = loader.newStream(SUFFIXES_FILENAME);
-                InputStream gramtabStream = loader.newStream(GRAMTAB_OPENCORPORA_FILENAME);
-                cachedDict = new Dictionary(tagStorage,
-                                            meta,
-                                            new WordsDAWG(wordsStream),
-                                            parsePredictionSuffixes(loader,
-                                                                    PREDICTION_SUFFIXES_FILENAME_TEMPLATE,
-                                                                    meta.compileOptions.paradigmPrefixes.length),
-                                            parseParadigms(paradigmsStream),
-                                            parseSuffixes(suffixesStream),
-                                            parseGramtab(tagStorage, gramtabStream));
-                wordsStream.close();
-                paradigmsStream.close();
-                suffixesStream.close();
-                gramtabStream.close();
+                Meta meta;
+                try (InputStream metaStream = loader.newStream(META_FILENAME)) {
+                    meta = parseMeta(metaStream);
+                }
+                try (InputStream grammemesStream = loader.newStream(GRAMMEMES_FILENAME)) {
+                    loadGrammemes(tagStorage, grammemesStream);
+                }
+                try (InputStream wordsStream = loader.newStream(WORDS_FILENAME);
+                     InputStream paradigmsStream = loader.newStream(PARADIGMS_FILENAME);
+                     InputStream suffixesStream = loader.newStream(SUFFIXES_FILENAME);
+                     InputStream gramtabStream = loader.newStream(GRAMTAB_OPENCORPORA_FILENAME)) {
+                    cachedDict = new Dictionary(tagStorage,
+                                                meta,
+                                                new WordsDAWG(wordsStream),
+                                                parsePredictionSuffixes(loader,
+                                                                        PREDICTION_SUFFIXES_FILENAME_TEMPLATE,
+                                                                        meta.compileOptions.paradigmPrefixes.length),
+                                                parseParadigms(paradigmsStream),
+                                                parseSuffixes(suffixesStream),
+                                                parseGramtab(tagStorage, gramtabStream));
+                }
             }
             return cachedDict;
         }

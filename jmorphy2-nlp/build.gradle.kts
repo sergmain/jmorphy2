@@ -3,8 +3,8 @@ description = "NLP based on pymorphy2 dictionaries"
 version = getLibraryVersion()
 
 java {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
@@ -12,6 +12,7 @@ dependencies {
 
     testImplementation("junit:junit:${Versions.junit}")
     testImplementation(project(":jmorphy2-dicts-ru"))
+    testImplementation(project(path = ":jmorphy2-core", configuration = "tests"))
  
 //   testImplementation(project(":jmorphy2-core").dependencyProject.sourceSets["test"].output)
 }

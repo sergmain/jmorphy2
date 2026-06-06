@@ -42,14 +42,15 @@ public class Resources {
         throws IOException
     {
         String path = String.format("/lang/%s/%s", lang.name().toLowerCase(), filename);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-            Resources.class.getResourceAsStream(path), StandardCharsets.UTF_8));
         List<String> lines = new ArrayList<>();
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            String processedLine = processLine(parseString(line));
-            if (!processedLine.equals("")) {
-                lines.add(processedLine);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+            Resources.class.getResourceAsStream(path), StandardCharsets.UTF_8))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                String processedLine = processLine(parseString(line));
+                if (!processedLine.equals("")) {
+                    lines.add(processedLine);
+                }
             }
         }
         return lines;

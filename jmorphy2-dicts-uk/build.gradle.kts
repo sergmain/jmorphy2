@@ -4,8 +4,8 @@ val dictsVersion = "2.4.1.1.1460299261"
 version = "${getLibraryVersion()}-$dictsVersion"
 
 java {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 val fetchDicts = tasks.register<Pymorphy2Dicts>("fetchPymorphy2Dicts") {

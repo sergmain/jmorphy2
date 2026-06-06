@@ -2,19 +2,16 @@ package company.evo.jmorphy2.nlp;
 
 import java.util.Set;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
 
-import com.google.common.base.Splitter;
-import com.google.common.base.CharMatcher;
-import com.google.common.collect.Sets;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableList;
 
 
 public class Rule {
     public final String leftStr;
     public final String rightStr;
-    public final ImmutableSet<String> left;
-    public final ImmutableList<NodeMatcher> right;
+    public final Set<String> left;
+    public final List<NodeMatcher> right;
     public final int rightSize;
     public final float weight;
 
@@ -31,12 +28,12 @@ public class Rule {
         this.weight = weight;
     }
 
-    protected ImmutableSet<String> parseLeft(String left) {
-        return ImmutableSet.copyOf(grammemeSplitter.split(left));
+    protected Set<String> parseLeft(String left) {
+        return Set.copyOf(grammemeSplitter.split(left));
     }
 
-    protected ImmutableList<NodeMatcher> parseRight(String right) {
-        ImmutableList.Builder<NodeMatcher> listBuilder = ImmutableList.builder();
+    protected List<NodeMatcher> parseRight(String right) {
+        List<NodeMatcher> listBuilder = new ArrayList<>();
         for (String part : rhsSplitter.split(right)) {
             int flags = 0;
             if (part.startsWith("@")) {
@@ -49,10 +46,10 @@ public class Rule {
                 (part.startsWith("\"") && part.endsWith("\""))) {
                 listBuilder.add(new NodeMatcher(null, wordMatcher.trimFrom(part), flags));
             } else {
-                listBuilder.add(new NodeMatcher(ImmutableSet.copyOf(grammemeSplitter.split(part)), null, flags));
+                listBuilder.add(new NodeMatcher(Set.copyOf(grammemeSplitter.split(part)), null, flags));
             }
         }
-        return listBuilder.build();
+        return List.copyOf(listBuilder);
     }
 
     public boolean match(List<Node> nodes) {
@@ -69,7 +66,7 @@ public class Rule {
         return true;
     }
 
-    public ImmutableSet<String> commonGrammemeValues(List<Node> nodes, Set<String> allowedValues) {
+    public Set<String> commonGrammemeValues(List<Node> nodes, Set<String> allowedValues) {
         Set<String> values = null;
         int i = 0;
         for (Node node : nodes) {
@@ -80,13 +77,16 @@ public class Rule {
             if (values == null) {
                 values = node.grammemeValues;
             } else {
-                values = Sets.intersection(values, node.grammemeValues);
+                Set<String> intersection = new HashSet<>(values);
+                intersection.retainAll(node.grammemeValues);
+                values = intersection;
             }
             i++;
         }
-        values = Sets.intersection(values, allowedValues);
-        values = Sets.union(values, left);
-        return ImmutableSet.copyOf(values);
+        Set<String> result = new HashSet<>(values);
+        result.retainAll(allowedValues);
+        result.addAll(left);
+        return Set.copyOf(result);
     }
 
     @Override
@@ -95,14 +95,14 @@ public class Rule {
     }
 
     public static class NodeMatcher {
-        public final ImmutableSet<String> grammemeValues;
+        public final Set<String> grammemeValues;
         public final String word;
         public final int flags;
 
         public final static int NO_COMMONS = 0x01;
         public final static int NO_REDUCE = 0x02;
 
-        public NodeMatcher(ImmutableSet<String> grammemeValues, String word, int flags) {
+        public NodeMatcher(Set<String> grammemeValues, String word, int flags) {
             this.grammemeValues = grammemeValues;
             this.word = word == null ? null : word.toLowerCase();
             this.flags = flags;
