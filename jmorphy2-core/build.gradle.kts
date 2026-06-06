@@ -9,7 +9,11 @@ java {
 
 dependencies {
     implementation("commons-io:commons-io:${Versions.commonsIo}")
-    implementation("org.noggit:noggit:${Versions.noggit}")
+    implementation("tools.jackson.core:jackson-databind:3.0.2") {
+        exclude(group = "tools.jackson.dataformat", module = "jackson-dataformat-xml")
+        exclude(group = "org.codehaus.woodstox", module = "stax2-api")
+        exclude(group = "org.codehaus.woodstox", module = "woodstox-core")
+    }
     implementation("commons-codec:commons-codec:${Versions.commonsCodec}")
 
     testImplementation("junit:junit:${Versions.junit}")
