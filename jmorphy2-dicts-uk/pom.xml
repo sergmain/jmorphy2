@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.htrucker</groupId>
+        <artifactId>jmorphy2-parent</artifactId>
+        <version>0.4.0</version>
+    </parent>
+
+    <artifactId>jmorphy2-dicts-uk</artifactId>
+    <name>jmorphy2-dicts-uk</name>
+    <description>Ukrainian pymorphy2 dictionaries</description>
+
+    <properties>
+        <dicts.lang>uk</dicts.lang>
+        <dicts.version>2.4.1.1.1460299261</dicts.version>
+        <dicts.md5>f193a4ac7a8e6124e6fd8846f06ccca0</dicts.md5>
+    </properties>
+
+    <profiles>
+        <!--
+            Activates ONLY when the unpacked dict tree is absent (fresh clone / after manual wipe).
+            The tree lives under src/main/resources, so it survives 'mvn clean' and is reused.
+        -->
+        <profile>
+            <id>download-pymorphy2-dicts</id>
+            <activation>
+                <file>
+                    <missing>${project.basedir}/src/main/resources/company/evo/jmorphy2/uk/pymorphy2_dicts</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>fetch-pymorphy2-dicts</id>
+                                <phase>generate-resources</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <property name="pkg"     value="pymorphy2-dicts-${dicts.lang}"/>
+                                        <property name="full"    value="${pkg}-${dicts.version}"/>
+                                        <property name="inner"   value="pymorphy2_dicts_${dicts.lang}"/>
+                                        <property name="out"     value="${project.basedir}/src/main/resources"/>
+                                        <property name="dest"    value="${out}/company/evo/jmorphy2/${dicts.lang}/pymorphy2_dicts"/>
+                                        <property name="archive" value="${project.build.directory}/${full}.tar.gz"/>
+                                        <property name="url"     value="https://files.pythonhosted.org/packages/source/p/${pkg}/${full}.tar.gz"/>
+
+                                        <mkdir dir="${project.build.directory}"/>
+                                        <echo message="Downloading ${url}"/>
+                                        <get src="${url}" dest="${archive}" verbose="true" usetimestamp="true"/>
+
+                                        <!-- local MD5 verification (PyPI ignores the legacy ?md5= query param) -->
+                                        <checksum file="${archive}" algorithm="MD5"
+                                                  property="${dicts.md5}" verifyProperty="dicts.md5.ok"/>
+                                        <fail message="MD5 mismatch for ${full}.tar.gz (expected ${dicts.md5})">
+                                            <condition><isfalse value="${dicts.md5.ok}"/></condition>
+                                        </fail>
+                                        <echo message="MD5 verified for ${full}.tar.gz"/>
+
+                                        <mkdir dir="${dest}"/>
+                                        <untar src="${archive}" dest="${dest}" compression="gzip">
+                                            <patternset>
+                                                <include name="${full}/${inner}/data/*"/>
+                                            </patternset>
+                                            <mapper>
+                                                <globmapper from="${full}/${inner}/data/*" to="*"/>
+                                            </mapper>
+                                        </untar>
+                                        <echo message="Unpacked dicts into ${dest}"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

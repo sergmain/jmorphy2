@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.htrucker</groupId>
+        <artifactId>jmorphy2-parent</artifactId>
+        <version>0.4.0</version>
+    </parent>
+
+    <artifactId>jmorphy2-lucene</artifactId>
+    <name>jmorphy2-lucene</name>
+    <description>Stemmer and tagger based on jmorphy2 for Lucene</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.htrucker</groupId>
+            <artifactId>jmorphy2-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.htrucker</groupId>
+            <artifactId>jmorphy2-nlp</artifactId>
+        </dependency>
+
+        <!-- dict data needed at runtime / test only; not on the compile path -->
+        <dependency>
+            <groupId>com.htrucker</groupId>
+            <artifactId>jmorphy2-dicts-ru</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.htrucker</groupId>
+            <artifactId>jmorphy2-dicts-uk</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-test-framework</artifactId>
+            <version>${lucene.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.htrucker</groupId>
+            <artifactId>jmorphy2-core</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
