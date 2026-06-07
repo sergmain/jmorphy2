@@ -53,7 +53,7 @@ public class Tag {
             grammemes.add(grammeme);
             normalizedGrammemeValues.add(grammeme.key);
         }
-        this.grammemes = Set.copyOf(grammemes);
+        this.grammemes = Collections.unmodifiableSet(grammemes);
 
         Collections.sort(normalizedGrammemeValues);
         this.normalizedTagString = String.join(" ", normalizedGrammemeValues);
