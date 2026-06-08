@@ -1,5 +1,7 @@
 package company.evo.jmorphy2;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.*;
 
 
@@ -25,18 +27,18 @@ public class Tag {
     private final Storage storage;
 
     public final Set<Grammeme> grammemes;
-    public final Grammeme POS;
-    public final Grammeme anymacy;
-    public final Grammeme aspect;
-    public final Grammeme Case;
-    public final Grammeme gender;
-    public final Grammeme involvement;
-    public final Grammeme mood;
-    public final Grammeme number;
-    public final Grammeme person;
-    public final Grammeme tense;
-    public final Grammeme transitivity;
-    public final Grammeme voice;
+    public final @Nullable Grammeme POS;
+    public final @Nullable Grammeme anymacy;
+    public final @Nullable Grammeme aspect;
+    public final @Nullable Grammeme Case;
+    public final @Nullable Grammeme gender;
+    public final @Nullable Grammeme involvement;
+    public final @Nullable Grammeme mood;
+    public final @Nullable Grammeme number;
+    public final @Nullable Grammeme person;
+    public final @Nullable Grammeme tense;
+    public final @Nullable Grammeme transitivity;
+    public final @Nullable Grammeme voice;
 
     public Tag(String tagString, Storage storage) {
         this.originalTagString = tagString;
@@ -72,7 +74,7 @@ public class Tag {
         voice = getGrammemeFor(VOICE);
     }
 
-    private Grammeme getGrammemeFor(String rootValue) {
+    private @Nullable Grammeme getGrammemeFor(String rootValue) {
         Grammeme rootGrammeme = storage.getGrammeme(rootValue);
         if (rootGrammeme == null) {
             return null;
@@ -97,7 +99,10 @@ public class Tag {
         return grammemes.contains(storage.getGrammeme(grammemeValue));
     }
 
-    public boolean contains(Grammeme grammeme) {
+    public boolean contains(@Nullable Grammeme grammeme) {
+        if (grammeme == null) {
+            return false;
+        }
         return grammemes.contains(grammeme);
     }
 
@@ -138,8 +143,7 @@ public class Tag {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Tag) {
-            Tag other = (Tag) obj;
+        if (obj instanceof Tag other) {
             return grammemes.equals(other.grammemes) &&
                     storage == other.storage;
         }
@@ -179,7 +183,7 @@ public class Tag {
             return String.join(" ", normalizedGrammemeValues);
         }
 
-        public Tag getTag(String tagString) {
+        public @Nullable Tag getTag(String tagString) {
             return tags.get(normalizeTagString(tagString));
         }
 
@@ -200,7 +204,7 @@ public class Tag {
             return tag;
         }
 
-        public Grammeme getGrammeme(String grammemeValue) {
+        public @Nullable Grammeme getGrammeme(@Nullable String grammemeValue) {
             if (grammemeValue == null) {
                 return null;
             }
@@ -216,7 +220,7 @@ public class Tag {
         }
 
         public Grammeme newGrammeme(List<String> grammemeInfo) {
-            Grammeme grammeme = getGrammeme(grammemeInfo.get(0));
+            Grammeme grammeme = getGrammeme(grammemeInfo.getFirst());
             if (grammeme == null) {
                 grammeme = new Grammeme(grammemeInfo, this);
                 addGrammeme(grammeme);

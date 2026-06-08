@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jspecify.annotations.Nullable;
 
 
 public class PayloadsDAWG extends DAWG {
@@ -35,7 +36,7 @@ public class PayloadsDAWG extends DAWG {
         return values;
     }
 
-    protected byte[] decodeValue(byte[] value) {
+    protected static byte[] decodeValue(byte[] value) {
         return Base64.decodeBase64(value);
     }
 
@@ -43,14 +44,14 @@ public class PayloadsDAWG extends DAWG {
         return similarItems(key, null);
     }
 
-    public List<Payload> similarItems(String key, Map<Character,String> replaceChars)
+    public List<Payload> similarItems(String key, @Nullable Map<Character,String> replaceChars)
         throws IOException
     {
         return similarItems(key, replaceChars, "", Dict.ROOT);
     }
 
     private List<Payload> similarItems(String key,
-                                       Map<Character,String> replaceChars,
+                                       @Nullable Map<Character,String> replaceChars,
                                        String prefix,
                                        int index)
         throws IOException
@@ -146,7 +147,7 @@ public class PayloadsDAWG extends DAWG {
         }
 
         public boolean next() {
-            int index = indexStack.get(indexStack.size() - 1);
+            int index = indexStack.getLast();
 
             if (lastIndex != 0) {
                 byte childLabel = guide.child(index);
@@ -165,12 +166,12 @@ public class PayloadsDAWG extends DAWG {
                             keyLength--;
                         }
 
-                        indexStack.remove(indexStack.size() - 1);
+                        indexStack.removeLast();
                         if (indexStack.isEmpty()) {
                             return false;
                         }
 
-                        index = indexStack.get(indexStack.size() - 1);
+                        index = indexStack.getLast();
                         if (siblingLabel != 0) {
                             index = follow(siblingLabel, index);
                             if (index == Dict.MISSING) {

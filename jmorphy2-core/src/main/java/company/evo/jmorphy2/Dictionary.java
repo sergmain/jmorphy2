@@ -5,16 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Collection;
 
 import org.apache.commons.io.input.SwappedDataInputStream;
-
-import company.evo.dawg.PayloadsDAWG;
 
 
 public final class Dictionary {
@@ -61,7 +54,7 @@ public final class Dictionary {
         }
 
         @SuppressWarnings("unchecked")
-        private Meta parseMeta(InputStream stream) throws IOException {
+        private static Meta parseMeta(InputStream stream) throws IOException {
             Map<String,Object> rawMeta = new HashMap<>();
             List<List<Object>> parsed = (List<List<Object>>) JSONUtils.parseJSON(stream);
             for (List<Object> pair : parsed) {
@@ -70,9 +63,9 @@ public final class Dictionary {
             return new Meta(rawMeta);
         }
 
-        private SuffixesDAWG[] parsePredictionSuffixes(FileLoader loader,
-                                                       String filenameTemplate,
-                                                       int num)
+        private static SuffixesDAWG[] parsePredictionSuffixes(FileLoader loader,
+                                                              String filenameTemplate,
+                                                              int num)
             throws IOException
         {
             SuffixesDAWG[] predictionSuffixes = new SuffixesDAWG[num];
@@ -84,7 +77,7 @@ public final class Dictionary {
             return predictionSuffixes;
         }
 
-        private Paradigm[] parseParadigms(InputStream stream) throws IOException {
+        private static Paradigm[] parseParadigms(InputStream stream) throws IOException {
             DataInput paradigmsStream = new SwappedDataInputStream(stream);
             short paradigmCount = paradigmsStream.readShort();
             Paradigm[] paradigms = new Paradigm[paradigmCount];
@@ -95,19 +88,19 @@ public final class Dictionary {
         }
 
         @SuppressWarnings("unchecked")
-        private String[] parseSuffixes(InputStream stream) throws IOException {
+        private static String[] parseSuffixes(InputStream stream) throws IOException {
             return ((List<String>) JSONUtils.parseJSON(stream)).toArray(new String[0]);
         }
 
         @SuppressWarnings("unchecked")
-        private void loadGrammemes(Tag.Storage tagStorage, InputStream stream) throws IOException {
+        private static void loadGrammemes(Tag.Storage tagStorage, InputStream stream) throws IOException {
             for (List<String> grammemeInfo : (List<List<String>>) JSONUtils.parseJSON(stream)) {
                 tagStorage.newGrammeme(grammemeInfo);
             }
         }
 
         @SuppressWarnings("unchecked")
-        private Tag[] parseGramtab(Tag.Storage tagStorage, InputStream stream) throws IOException {
+        private static Tag[] parseGramtab(Tag.Storage tagStorage, InputStream stream) throws IOException {
             List<String> tagStrings = (List<String>) JSONUtils.parseJSON(stream);
             int tagsLength = tagStrings.size();
             Tag[] gramtab = new Tag[tagsLength];
@@ -188,7 +181,7 @@ public final class Dictionary {
         String prefix = paradigmPrefixes[paradigm.getStemPrefixId(idx)];
         String suffix = suffixes[paradigm.getStemSuffixId(idx)];
 
-        if (!suffix.equals("")) {
+        if (!suffix.isEmpty()) {
             return word.substring(prefix.length(), word.length() - suffix.length());
         }
         return word.substring(prefix.length());

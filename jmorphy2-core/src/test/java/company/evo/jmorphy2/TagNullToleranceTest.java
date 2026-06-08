@@ -13,13 +13,13 @@ import static org.junit.Assert.assertTrue;
 /**
  * Regression guard for the NPE introduced by the Guava-removal / Jackson-3 migration
  * (commits 62a5148 / 0507490) and fixed in d089aa8.
- *
+ * <br/>
  * When {@code Tag.grammemes} was backed by an immutable {@code Set.copyOf(...)}, the JDK
  * immutable-set implementations reject {@code null} arguments to {@code contains}
  * ({@code Objects.requireNonNull}), so any query method receiving a {@code null} grammeme
  * (e.g. {@code ParsedWord.inflect} forwarding a {@code storage.getGrammeme(unknown)} == null
  * into {@code containsAll}) threw NullPointerException instead of returning a boolean.
- *
+ * <br/>
  * Guava's ImmutableSet tolerated {@code contains(null)} (returned false); a HashSet-backed
  * {@code Collections.unmodifiableSet} restores that tolerance. These tests pin the
  * null-tolerant contract for the query methods so the immutable-set form cannot silently

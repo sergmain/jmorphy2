@@ -7,6 +7,7 @@ import java.util.List;
 
 import company.evo.jmorphy2.ParsedWord;
 import company.evo.jmorphy2.Tag;
+import org.jspecify.annotations.Nullable;
 
 
 public abstract class AnalyzerUnit {
@@ -44,7 +45,7 @@ public abstract class AnalyzerUnit {
         return terminate;
     }
 
-    public abstract List<ParsedWord> parse(String word, String wordLower) throws IOException;
+    public abstract @Nullable List<ParsedWord> parse(String word, String wordLower) throws IOException;
 
     class AnalyzerParsedWord extends ParsedWord {
         public AnalyzerParsedWord(String word, Tag tag, String normalForm, String foundWord, float score) {

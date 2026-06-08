@@ -1,8 +1,6 @@
 package company.evo.jmorphy2;
 
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +19,7 @@ public class Resources {
                 continue;
             }
             String key = parts[0].trim();
-            if (key.length() == 0) {
+            if (key.isEmpty()) {
                 continue;
             }
             String value = parts[1].trim();
@@ -43,13 +41,18 @@ public class Resources {
     {
         String path = String.format("/lang/%s/%s", lang.name().toLowerCase(), filename);
         List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-            Resources.class.getResourceAsStream(path), StandardCharsets.UTF_8))) {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                String processedLine = processLine(parseString(line));
-                if (!processedLine.equals("")) {
-                    lines.add(processedLine);
+        try (InputStream inputStream = Resources.class.getResourceAsStream(path)) {
+            if (inputStream == null) {
+                throw new IllegalStateException("Resource not found: " + path);
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                inputStream, StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine())!=null) {
+                    String processedLine = processLine(parseString(line));
+                    if (!processedLine.isEmpty()) {
+                        lines.add(processedLine);
+                    }
                 }
             }
         }
@@ -68,8 +71,7 @@ public class Resources {
     private static String parseString(String s) {
         int readPos = 0;
         int len = s.length();
-        int writePos = 0;
-        String out = "";
+        StringBuilder out = new StringBuilder();
         while (readPos < len) {
             char c = s.charAt(readPos++);
             if (c == '\\') {
@@ -96,15 +98,16 @@ public class Resources {
                         c = '\f';
                         break;
                     case 'u':
-                        if (readPos + 3 >= len)
+                        if (readPos + 3 >= len) {
                             throw new RuntimeException("Invalid escaped char in [" + s + "]");
+                        }
                         c = (char) Integer.parseInt(s.substring(readPos, readPos + 4), 16);
                         readPos += 4;
                         break;
                 }
             }
-            out += c;
+            out.append(c);
         }
-        return out;
+        return out.toString();
     }
 }

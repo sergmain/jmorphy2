@@ -1,5 +1,7 @@
 package company.evo.jmorphy2;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -7,7 +9,7 @@ import java.util.Objects;
 public class Grammeme {
     public final String key;
     public final String value;
-    public final String parentValue;
+    public final @Nullable String parentValue;
     public final String russianValue;
     public final String description;
 
@@ -35,18 +37,18 @@ public class Grammeme {
         this.storage = storage;
     }
 
-    private String stringOrNull(String s) {
-        if (s == null || s.equals("")) {
+    private static @Nullable String stringOrNull(@Nullable String s) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
         return s;
     }
 
-    public Grammeme getParent() {
+    public @Nullable Grammeme getParent() {
         return storage.getGrammeme(parentValue);
     }
 
-    public Grammeme getRoot() {
+    public @Nullable Grammeme getRoot() {
         Grammeme grammeme = this;
         Grammeme parentGrammeme = grammeme.getParent();
         if (parentGrammeme == null) {

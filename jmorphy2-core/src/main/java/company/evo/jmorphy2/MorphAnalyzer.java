@@ -1,9 +1,6 @@
 package company.evo.jmorphy2;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -12,32 +9,32 @@ import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.text.Normalizer;
 
 
 import company.evo.jmorphy2.units.*;
+import org.jspecify.annotations.Nullable;
 
 
 public class MorphAnalyzer {
     private final Tag.Storage tagStorage;
     private final List<AnalyzerUnit> units;
-    private final ProbabilityEstimator prob;
-    private final Cache<String,List<ParsedWord>> cache;
+    private final @Nullable ProbabilityEstimator prob;
+    private final @Nullable Cache<String,List<ParsedWord>> cache;
 
-    enum Lang { RU, UK };
+    public enum Lang { RU, UK }
 
     public static class Builder {
         // private static final String ENV_DICT_PATH = "PYMORPHY2_DICT_PATH";
         private static final String DICT_PATH_VAR = "dictPath";
         public static final int DEFAULT_CACHE_SIZE = 10000;
 
-        private String dictPath;
-        private FileLoader loader;
-        private Map<Character,String> charSubstitutes;
-        private Lang lang = Lang.RU;
-        private List<AnalyzerUnit.Builder> unitBuilders;
+        private @Nullable String dictPath;
+        private @Nullable FileLoader loader;
+        private @Nullable Map<Character,String> charSubstitutes;
+        private @Nullable Lang lang = Lang.RU;
+        private @Nullable List<AnalyzerUnit.Builder> unitBuilders;
         private int cacheSize = DEFAULT_CACHE_SIZE;
-        private Cache<String,List<ParsedWord>> cache = null;
+        private @Nullable Cache<String,List<ParsedWord>> cache = null;
 
         public Builder dictPath(String path) {
             this.dictPath = path;
@@ -116,15 +113,15 @@ public class MorphAnalyzer {
 
     private MorphAnalyzer(Tag.Storage tagStorage,
                           List<AnalyzerUnit> units,
-                          ProbabilityEstimator prob,
-                          Cache<String,List<ParsedWord>> cache) throws IOException {
+                          @Nullable ProbabilityEstimator prob,
+                          @Nullable Cache<String,List<ParsedWord>> cache) throws IOException {
         this.tagStorage = tagStorage;
         this.units = units;
         this.prob = prob;
         this.cache = cache;
     }
 
-    public Grammeme getGrammeme(String value) {
+    public @Nullable Grammeme getGrammeme(String value) {
         return tagStorage.getGrammeme(value);
     }
 
@@ -132,7 +129,7 @@ public class MorphAnalyzer {
         return tagStorage.getAllGrammemes();
     }
 
-    public Tag getTag(String tagString) {
+    public @Nullable Tag getTag(String tagString) {
         return tagStorage.getTag(tagString);
     }
 
@@ -205,7 +202,7 @@ public class MorphAnalyzer {
 
         parseds = filterDups(parseds);
         parseds = estimate(parseds);
-        Collections.sort(parseds, Collections.reverseOrder());
+        parseds.sort(Collections.reverseOrder());
         return parseds;
     }
 
@@ -241,7 +238,7 @@ public class MorphAnalyzer {
         return estimatedParseds;
     }
 
-    private List<ParsedWord> filterDups(List<ParsedWord> parseds) {
+    private static List<ParsedWord> filterDups(List<ParsedWord> parseds) {
         Set<ParsedWord.Unique> seenParseds = new HashSet<>();
         List<ParsedWord> filteredParseds = new ArrayList<ParsedWord>();
         for (ParsedWord p : parseds) {
@@ -267,7 +264,7 @@ public class MorphAnalyzer {
             });
         }
 
-        V getIfPresent(K key) {
+        @Nullable V getIfPresent(K key) {
             return map.get(key);
         }
 

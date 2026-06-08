@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public abstract class ParsedWord implements Comparable {
+public abstract class ParsedWord implements Comparable<ParsedWord> {
     public static final float EPS = 1e-6f;
 
     public final String word;
@@ -49,8 +49,7 @@ public abstract class ParsedWord implements Comparable {
     }
 
     @Override
-    public int compareTo(Object obj) {
-        ParsedWord other = (ParsedWord) obj;
+    public int compareTo(ParsedWord other) {
         if (score > other.score) return 1;
         if (score < other.score) return -1;
         return 0;

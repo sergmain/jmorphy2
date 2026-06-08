@@ -17,7 +17,7 @@ public class WordsDAWG extends PayloadsDAWG {
         super(stream);
     }
 
-    protected WordForm decodePayload(Payload payload) throws IOException {
+    protected static WordForm decodePayload(Payload payload) throws IOException {
         DataInput stream = new DataInputStream(new ByteArrayInputStream(payload.value));
         short paradigmId = stream.readShort();
         short idx = stream.readShort();

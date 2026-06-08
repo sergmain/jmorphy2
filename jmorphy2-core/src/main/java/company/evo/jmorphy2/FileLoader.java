@@ -1,5 +1,7 @@
 package company.evo.jmorphy2;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 

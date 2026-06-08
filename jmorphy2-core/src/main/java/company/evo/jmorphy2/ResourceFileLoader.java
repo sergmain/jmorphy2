@@ -1,5 +1,7 @@
 package company.evo.jmorphy2;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,7 +14,11 @@ public class ResourceFileLoader extends FileLoader {
     }
 
     @Override
-    public InputStream newStream(String filename) throws IOException {
-        return getClass().getResourceAsStream(basePath + "/" + filename);
+    public InputStream newStream(String filename) {
+        InputStream is = getClass().getResourceAsStream(basePath + "/" + filename);
+        if (is==null) {
+            throw new IllegalStateException("Resource not found: " + filename);
+        }
+        return is;
     }
 }

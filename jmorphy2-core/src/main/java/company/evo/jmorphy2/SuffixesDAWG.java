@@ -17,7 +17,7 @@ public class SuffixesDAWG extends PayloadsDAWG {
         super(stream);
     }
 
-    protected SuffixForm decodePayload(Payload payload) throws IOException {
+    protected static SuffixForm decodePayload(Payload payload) throws IOException {
         DataInput stream = new DataInputStream(new ByteArrayInputStream(payload.value));
         short count = stream.readShort();
         short paradigmId = stream.readShort();
